@@ -3,6 +3,24 @@
 
 ## 使用方式
 
+在根目录下的build.gradle文件添加jitpack.io远程仓库
+<pre><code>
+    allprojects {
+            repositories {
+                ...
+                maven { url 'https://jitpack.io' }
+            }
+        }
+<pre><code>
+
+在app目录下的build.gradle文件添加依赖
+<pre><code>
+dependencies {
+            compile 'com.github.tanxinye:LoadMoreHelper:0.1.1'
+    }
+<pre><code>
+
+##代码示例
 <pre><code>
        LoadMoreHelper.with(rvMain).create().onListener(new OnLoadMoreListener() {
            @Override
