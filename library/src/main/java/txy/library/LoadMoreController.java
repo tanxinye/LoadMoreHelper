@@ -14,11 +14,11 @@ final class LoadMoreController {
     private RecyclerView.Adapter mAdapter;
     private final LoadMoreFooterView loadMoreFooterView;
 
-    LoadMoreController(RecyclerView recyclerView, LoadMoreHelper.Builder builder) {
+    LoadMoreController(RecyclerView recyclerView, LoadMoreHelper.Config config) {
         mRecyclerView = recyclerView;
         mAdapter = recyclerView.getAdapter();
         mAdapter.registerAdapterDataObserver(new LoadMoreAdapterDataObserver());
-        loadMoreFooterView = new LoadMoreFooterView(recyclerView.getContext(), builder);
+        loadMoreFooterView = new LoadMoreFooterView(recyclerView.getContext(), config);
         loadMoreAdapter = new LoadMoreAdapter(mAdapter, loadMoreFooterView);
         mRecyclerView.setAdapter(loadMoreAdapter);
     }

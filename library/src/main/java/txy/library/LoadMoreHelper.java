@@ -9,50 +9,52 @@ import android.view.View;
  * LoadMoreHelper 负责调用Builder、Controler
  */
 public class LoadMoreHelper {
-    private static volatile LoadMoreHelper sLoadMore;
-    private final Builder mBuilder;
-    private final LoadMoreController loadMoreControler;
+    private static volatile LoadMoreHelper loadMoreHelper;
+    private LoadMoreController loadMoreControler;
+    private RecyclerView mRecyclerView;
 
     private LoadMoreHelper(RecyclerView recyclerView) {
-        mBuilder = new Builder(this);
-        loadMoreControler = new LoadMoreController(recyclerView, mBuilder);
+        mRecyclerView = recyclerView;
     }
 
     public static LoadMoreHelper with(RecyclerView recyclerView) {
-        if (sLoadMore == null) {
+        if (loadMoreHelper == null) {
             synchronized (LoadMoreHelper.class) {
-                if (sLoadMore == null) {
+                if (loadMoreHelper == null) {
                     return new LoadMoreHelper(recyclerView);
                 }
             }
         }
-        return sLoadMore;
+        return loadMoreHelper;
     }
 
     public void onListener(OnLoadMoreListener listener) {
-        loadMoreControler.onListener(listener);
+        if (loadMoreControler != null) {
+            loadMoreControler.onListener(listener);
+        }
     }
 
-    public Builder build() {
-        return mBuilder;
+    public LoadMoreHelper create(Config config) {
+        loadMoreControler = new LoadMoreController(mRecyclerView, config);
+        return this;
     }
 
-    public class Builder {
+    public LoadMoreHelper create() {
+        create(new Config());
+        return this;
+    }
+
+    public static class Config {
         private View view;
-        private LoadMoreHelper sLoadMore;
         private String completeText = "没有更多数据了";
         private String loadingText = "正在加载...";
         private int textColor = Color.parseColor("#000000");
-
-        public Builder(LoadMoreHelper loadMore) {
-            this.sLoadMore = loadMore;
-        }
 
         public View getView() {
             return view;
         }
 
-        public Builder setView(View view) {
+        public Config setView(View view) {
             this.view = view;
             return this;
         }
@@ -61,7 +63,7 @@ public class LoadMoreHelper {
             return completeText;
         }
 
-        public Builder setCompleteText(String completeText) {
+        public Config setCompleteText(String completeText) {
             this.completeText = completeText;
             return this;
         }
@@ -70,7 +72,7 @@ public class LoadMoreHelper {
             return loadingText;
         }
 
-        public Builder setLoadingText(String loadingText) {
+        public Config setLoadingText(String loadingText) {
             this.loadingText = loadingText;
             return this;
         }
@@ -79,13 +81,9 @@ public class LoadMoreHelper {
             return textColor;
         }
 
-        public Builder setTextColor(int textColor) {
+        public Config setTextColor(int textColor) {
             this.textColor = textColor;
             return this;
-        }
-
-        public LoadMoreHelper create() {
-            return sLoadMore;
         }
     }
 }

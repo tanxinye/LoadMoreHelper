@@ -21,21 +21,23 @@ public class MainActivity extends AppCompatActivity {
         rvMain.setLayoutManager(new LinearLayoutManager(this));
         rvMain.setAdapter(adapter = new NormalAdapter(0));
 
-        LoadMoreHelper.with(rvMain).build().setTextColor(R.color.colorPrimaryDark).create()
+//        LoadMoreHelper.with(rvMain).create().onListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                loadData();
+//            }
+//        });
+        LoadMoreHelper.with(rvMain).create(new LoadMoreHelper.Config()
+                .setTextColor(getResources().getColor(R.color.colorAccent))
+                .setCompleteText("我是有底线的").setLoadingText("哗啦哗啦的加载"))
                 .onListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                loadData();
-            }
-        });
 
-        LoadMoreHelper.with(rvMain).onListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                loadData();
-            }
-        });
-
+                    @Override
+                    public void onLoadMore() {
+                        loadData();
+                    }
+                });
+        loadData();
     }
 
     int count = 30;//模拟数据库的数据数量

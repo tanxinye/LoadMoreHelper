@@ -13,7 +13,7 @@ import android.widget.TextView;
 final class LoadMoreFooterView extends LinearLayout {
 
     private TextView textView;
-    private LoadMoreHelper.Builder mBuilder;
+    private LoadMoreHelper.Config mBuilder;
     private boolean hasCustomView;
 
     public LoadMoreFooterView(Context context) {
@@ -28,24 +28,23 @@ final class LoadMoreFooterView extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public LoadMoreFooterView(Context context, LoadMoreHelper.Builder builder) {
+    public LoadMoreFooterView(Context context, LoadMoreHelper.Config config) {
         super(context, null);
-        mBuilder = builder;
+        mBuilder = config;
 
         if (mBuilder.getView() != null) {
             addView(mBuilder.getView());
             hasCustomView = true;
-            return;
+        } else {
+            textView = new TextView(context);
+            textView.setGravity(Gravity.CENTER);
+            textView.setText(config.getLoadingText());
+            textView.setTextColor(config.getTextColor());
+            addView(textView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(context, 48f)));
+
+            setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            setGravity(Gravity.CENTER);
         }
-
-        textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        textView.setText(builder.getLoadingText());
-        textView.setTextColor(getResources().getColor(builder.getTextColor()));
-        addView(textView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(context, 48f)));
-
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        setGravity(Gravity.CENTER);
     }
 
     public static int dp2px(Context context, float v) {
